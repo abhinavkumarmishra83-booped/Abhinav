@@ -43,4 +43,76 @@
             border-radius: 6px;
             cursor: pointer;
             font-size: 16px;
-            font-
+            font-weight: bold;
+        }
+        button:hover {
+            background-color: #007a80;
+        }
+        .file-list {
+            margin-top: 20px;
+        }
+        .file-item {
+            background: #2d2d2d;
+            padding: 15px;
+            border-radius: 6px;
+            margin-bottom: 10px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .file-item a {
+            color: #00adb5;
+            text-decoration: none;
+            font-weight: bold;
+        }
+        .file-item a:hover {
+            text-decoration: underline;
+        }
+        .logout-btn {
+            background-color: #ff2e63;
+            float: right;
+        }
+        .logout-btn:hover {
+            background-color: #c71f46;
+        }
+        .clearfix::after {
+            content: "";
+            clear: both;
+            display: table;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <div class="clearfix">
+        <a href="/logout"><button class="logout-btn">Logout</button></a>
+        <h2>Welcome to Your Cloud Storage</h2>
+    </div>
+    
+    <div class="upload-section">
+        <h3>Upload a New File</h3>
+        <form action="/upload" method="POST" enctype="multipart/form-data">
+            <input type="file" name="file" required>
+            <button type="submit">Upload to Cloudinary</button>
+        </form>
+    </div>
+
+    <div class="file-list">
+        <h3>Your Uploaded Files</h3>
+        {% if files %}
+            {% for file in files %}
+                <div class="file-item">
+                    <span>{{ file.filename }}</span>
+                    <a href="{{ file.url }}" target="_blank">View / Download</a>
+                </div>
+            {% endfor %}
+        {% else %}
+            <p style="color: #888;">No files uploaded yet. Start uploading above!</p>
+        {% endif %}
+    </div>
+</div>
+
+</body>
+</html>
+
