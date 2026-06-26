@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MyCloud - Dashboard</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #121212;
+            color: #ffffff;
+            margin: 0;
+            padding: 20px;
+        }
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 2px solid #252525;
+            padding-bottom: 15px;
+            margin-bottom: 30px;
+        }
+        h1 { color: #00adb5; margin: 0; }
+        .logout-btn {
+            background: #ff4757;
+            color: white;
+            padding: 8px 16px;
+            text-decoration: none;
+            border-radius: 6px;
+            font-weight: bold;
+        }
+        .upload-section {
+            background: #1e1e1e;
+            padding: 20px;
+            border-radius: 12px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+            margin-bottom: 30px;
+            text-align: center;
+        }
+        input[type="file"] {
+            margin: 10px 0;
+        }
+        .upload-btn {
+            background: #00adb5;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 16px;
+            font-weight: bold;
+        }
+        .gallery {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            gap: 20px;
+        }
+        .gallery-item {
+            background: #1e1e1e;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+            text-align: center;
+            padding: 10px;
+        }
+        .gallery-item img, .gallery-item video {
+            width: 100%;
+            height: 200px;
+            object-fit: cover;
+            border-radius: 6px;
+        }
+        .download-link {
+            display: inline-block;
+            margin-top: 10px;
+            color: #00adb5;
+            text-decoration: none;
+            font-size: 14px;
+        }
+    </style>
+</head>
+<body>
+
+<div class="header">
+    <h1>MyCloud Dashboard</h1>
+    <a href="/logout" class="logout-btn">Logout</a>
+</div>
+
+<div class="upload-section">
+    <h3>Upload New Photo/Video</h3>
+    <form action="/upload" method="POST" enctype="multipart/form-data">
+        <input type="file" name="file" accept="image/*,video/*" required><br><br>
+        <button type="submit" class="upload-btn">Upload to Cloud</button>
+    </form>
+</div>
+
+<h2>Your Files (Check Files)</h2>
+<div class="gallery">
+    {% for file in files %}
+        <div class="gallery-item">
+            {% if file.type == 'image' %}
+                <img src="{{ file.url }}" alt="Uploaded Image">
+            {% else %}
+                <video src="{{ file.url }}" controls></video>
+            {% endif %}
+            <a href="{{ file.url }}" target="_blank" class="download-link">View Full Size</a>
+        </div>
+    {% else %}
+        <p style="color: #888;">Koi files upload nahi hain abhi.</p>
+    {% endfor %}
+</div>
+
+</body>
+</html>
