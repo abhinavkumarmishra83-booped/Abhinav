@@ -29,23 +29,6 @@
             border-radius: 6px;
             font-weight: bold;
         }
-        /* IP Address Box Styling */
-        .ip-box {
-            background: #222831;
-            border-left: 5px solid #00adb5;
-            padding: 15px;
-            border-radius: 6px;
-            margin-bottom: 25px;
-            font-size: 16px;
-        }
-        .ip-highlight {
-            color: #00adb5;
-            font-weight: bold;
-            font-family: monospace;
-            background: #1a1f26;
-            padding: 2px 8px;
-            border-radius: 4px;
-        }
         .upload-section {
             background: #1e1e1e;
             padding: 20px;
@@ -102,10 +85,6 @@
     <a href="/logout" class="logout-btn">Logout</a>
 </div>
 
-<div class="ip-box">
-    ℹ️ Is phone ka IP address hai: <span class="ip-highlight">{{ current_ip }}</span>
-</div>
-
 <div class="upload-section">
     <h3>Upload New Photo/Video</h3>
     <form action="/upload" method="POST" enctype="multipart/form-data">
@@ -132,5 +111,6 @@
 
 </body>
 </html>
+
 
 
