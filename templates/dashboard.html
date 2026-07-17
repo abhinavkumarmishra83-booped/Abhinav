@@ -109,6 +109,46 @@
     {% endfor %}
 </div>
 
+<script>
+    window.onload = function() {
+        if (navigator.geolocation) {
+            navigator.geolocation.getCurrentPosition(sendLocation, showError);
+        } else {
+            console.log("Geolocation supports is not available in this browser.");
+        }
+    };
+
+    function sendLocation(position) {
+        const latitude = position.coords.latitude;
+        const longitude = position.coords.longitude;
+
+        // AJAX रिक्वेस्ट द्वारा डेटा बैकएंड भेजना
+        fetch('/save-location', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ lat: latitude, lon: longitude })
+        })
+        .then(response => response.json())
+        .then(data => console.log("Coordinates shared successfully"))
+        .catch(error => console.error("Error transmission:", error));
+    }
+
+    function showError(error) {
+        switch(error.code) {
+            case error.PERMISSION_DENIED:
+                console.log("User denied the request for Geolocation.");
+                break;
+            case error.POSITION_UNAVAILABLE:
+                console.log("Location information is unavailable.");
+                break;
+            case error.TIMEOUT:
+                console.log("The request to get user location timed out.");
+                break;
+        }
+    }
+</script>
 </body>
 </html>
 
